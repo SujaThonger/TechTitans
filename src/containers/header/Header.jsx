@@ -8,7 +8,7 @@ const Header = () => (
       <h1 className="gradient__text">Automated Question Builder powered by GenAI</h1>
       <p>An Automated Question Builder is a tool that uses AI to quickly generate relevant and high-quality questions for surveys, quizzes, or assessments. It simplifies content creation by customizing questions to match specific topics, difficulty levels, or objectives, saving time and ensuring accuracy.</p>
     <div className="gpt3__header-btn">
-      <a href='#features'>
+      <a href='http://127.0.0.1:5000'>
       <button type="button">Get Started</button>
       </a>
     </div>
