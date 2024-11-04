@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard</title>
+    <!-- Include FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Include CSS file -->
+    <link rel="stylesheet" href="emp.css">
+    <!-- Include Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include external JS libraries for PDF and Excel generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+
+
+
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <span class="logo_name">QuestGenAI</span>
+        </div>
+        <ul class="nav-list">
+            <!-- Dashboard Section -->
+            <li>
+                <a href="#" id="dashboard-link" onclick="handleDashboardClick(); return false;">
+                    <i class="fas fa-th-large"></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+
+            </li>
+
+            <!-- Users Section -->
+            <li>
+                <a href="#" onclick="loadUserOptions(); return false;">
+                    <i class="fas fa-users"></i> Students
+                </a>
+            </li>
+
+
+            <!-- Quiz Generator Section -->
+            <li>
+                <a href="https://docs.google.com/forms/u/0/">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="links_name">Quiz</span>
+                </a>
+
+            </li>
+            <!-- Question Generator Section -->
+            <li>
+                <a href="http://127.0.0.1:5000/">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="links_name">Question</span>
+                </a>
+
+            </li>
+
+            <!-- Analytics Section -->
+            <li>
+                <a href="https://forms.gle/XDnFJjzLS6domNBk9" id="">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="links_name">Feedback</span>
+                </a>
+
+            </li>
+
+                <div class="logout">
+                    <a href="App.js">
+                        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </a>
+                </div>
+
+            <!-- Dark/Light Mode Toggle -->
+            <li class="theme-toggle">
+                <span class="links_name">Dark Mode</span>
+                <input type="checkbox" id="theme-switch" class="theme-switch">
+                <label for="theme-switch" class="switch-label"></label>
+            </li>
+
+
+        </ul>
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="dropdown profile-section">
+                <!-- Profile Image and Name -->
+                <div class="profile" onclick="toggleProfileDropdown()">
+                    <img id="profile-img" src="https://via.placeholder.com/40" alt="Profile">
+                    <div class="name">Student Dashboard</div>
+                </div>
+        
+                <!-- Navbar Profile Dropdown -->
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="#" id="change-photo">Change Photo</a>
+                </div>
+        
+                <!-- Hidden file input to select new profile photo -->
+                <input type="file" id="file-input" style="display: none;" accept="image/*">
+            </div>
+        
+            <!-- Notification Section -->
+            <div class="notification-icon" onclick="toggleNotificationDropdown()">
+                <i class="fas fa-bell"></i>
+                <span class="notification-count">3</span>
+                
+                <!-- Notification Dropdown -->
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <p class="notification-title">Notifications</p>
+                    <ul class="notification-list">
+                        <li class="notification-item">New quiz available</li>
+                        <li class="notification-item">New meeting added</li>
+                        <li class="notification-item">Feedback submitted successfully</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        
+
+
+        <!-- Section A - Status Cards -->
+        <div class="section-b">
+            <div class="speed-checker">
+                <h3>Live Internet Speed Checker</h3>
+                <canvas id="speedChart" width="400" height="200"></canvas>
+                <button id="check-speed-btn" onclick="checkSpeed()">Check Speed</button>
+                <div id="speed-output">Current Speed: </div>
+            </div>
+            <div class="todo-list">
+                <h3>To-do List</h3>
+                <div class="todo-input">
+                    <input type="text" id="todo-input" placeholder="Enter a new task">
+                    <button id="add-todo">Add</button>
+                </div>
+                <ul id="todo-items">
+                    <!-- To-do items will be appended here -->
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="section-c">
+            <div class="calendar-section">
+
+                <div id="calendar"></div>
+
+                <!-- Add New Event Section -->
+                <div class="event-input">
+                    <h4>Add a New Meeting or Task</h4>
+                    <label for="event-title">Task/Meeting Name:</label>
+                    <input type="text" id="event-title" placeholder="Enter task/meeting title">
+
+                    <label for="event-date">Date:</label>
+                    <input type="date" id="event-date">
+
+                    <button id="add-event-btn">Add Event</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FullCalendar JS -->
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+
+
+
+
+
+
+
+
+
+        <script>
+            // To-do List Functionality
+            document.addEventListener('DOMContentLoaded', function () {
+                const todoInput = document.getElementById('todo-input');
+                const addTodoButton = document.getElementById('add-todo');
+                const todoItemsList = document.getElementById('todo-items');
+
+                // Load tasks from localStorage
+                let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+                // Function to render tasks
+                function renderTasks() {
+                    todoItemsList.innerHTML = '';
+                    tasks.forEach((task, index) => {
+                        const li = document.createElement('li');
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = 'task-' + index;
+                        checkbox.checked = false;
+
+                        const label = document.createElement('label');
+                        label.htmlFor = 'task-' + index;
+                        label.textContent = task;
+
+                        // Event listener for checkbox
+                        checkbox.addEventListener('change', function () {
+                            if (this.checked) {
+                                removeTask(index);
+                            }
+                        });
+
+                        li.appendChild(checkbox);
+                        li.appendChild(label);
+                        todoItemsList.appendChild(li);
+                    });
+                }
+
+                // Function to add a task
+                function addTask(task) {
+                    if (task.trim() === '') return;
+                    tasks.push(task);
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    renderTasks();
+                    todoInput.value = '';
+                }
+
+                // Function to remove a task
+                function removeTask(index) {
+                    tasks.splice(index, 1);
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    renderTasks();
+                }
+
+                // Event listener for Add button
+                addTodoButton.addEventListener('click', function () {
+                    addTask(todoInput.value);
+                });
+
+                // Event listener for Enter key in input field
+                todoInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        addTask(todoInput.value);
+                    }
+                });
+
+                // Initial render
+                renderTasks();
+            });
+
+
+        </script>
+
+        <script>function updateAdminProfile() {
+                const profileData = JSON.parse(localStorage.getItem("profileData"));
+                if (profileData) {
+                    document.getElementById("profile-img").src = profileData.photo;
+                    document.querySelector(".name").textContent = profileData.name;
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", updateAdminProfile);
+        </script>
+
+
+
+
+
+
+        <script>
+            // Track which tab is currently active
+            let currentTab = 'dashboard';  // Set initial tab to 'dashboard'
+
+            // Generic function to handle when a tab (other than Dashboard) is clicked
+            function handleTabClick(tabName) {
+                currentTab = tabName;  // Update the active tab
+            }
+
+            // Function to handle Dashboard tab click
+            function handleDashboardClick() {
+                if (currentTab !== 'dashboard') {
+                    // If the current tab is not 'dashboard', reload the page
+                    location.reload();  // Reloads the entire page to show the full dashboard
+                }
+            }
+
+            // Add event listeners to other tabs to track the current tab
+            document.querySelectorAll('.nav-list li a').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const tabName = this.getAttribute('id');
+                    if (tabName !== 'dashboard-link') {
+                        handleTabClick(tabName);  // Change the current tab to the clicked one
+                    }
+                });
+            });
+
+            // Function to load dashboard content dynamically (if needed)
+            function loadDashboard() {
+                // Instead of replacing the main content, you can refresh certain parts of the dashboard dynamically here
+                console.log('Dashboard is active'); // Can be used for any dynamic loading/updates
+            }
+
+            // Initial load for the dashboard
+            document.addEventListener('DOMContentLoaded', function () {
+                if (currentTab === 'dashboard') {
+                    loadDashboard();  // Load additional dashboard features if needed
+                }
+            });
+        </script>
+
+
+        <script>
+            // Theme Switching Logic
+            const themeSwitch = document.getElementById('theme-switch');
+
+            // Load the saved theme from localStorage
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.add(`${currentTheme}-mode`);
+
+            // Set the toggle switch state based on the saved theme
+            if (currentTheme === 'dark') {
+                themeSwitch.checked = true;
+            }
+
+            // Toggle event listener
+            themeSwitch.addEventListener('change', () => {
+                if (themeSwitch.checked) {
+                    document.body.classList.remove('light-mode');
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        </script>
+
+<script>
+
+    function toggleProfileDropdown() {
+    const profileDropdown = document.getElementById("profileDropdown");
+    profileDropdown.classList.toggle("show");
+    }
+
+    function toggleNotificationDropdown() {
+        const notificationDropdown = document.getElementById("notificationDropdown");
+        notificationDropdown.classList.toggle("show");
+    }
+
+// Close dropdowns if clicked outside
+document.addEventListener("click", function (event) {
+const isProfileClick = event.target.closest(".profile-section");
+const isNotificationClick = event.target.closest(".notification-icon");
+
+if (!isProfileClick) {
+    document.getElementById("profileDropdown").classList.remove("show");
+}
+
+if (!isNotificationClick) {
+    document.getElementById("notificationDropdown").classList.remove("show");
+}
+});
+
+
+    </script>
+
+
+        <script>
+            // Assuming the `downloadReport` function from previous response is defined
+
+            // Add event listeners for each button
+            document.getElementById('downloadSalesButton').addEventListener('click', () => downloadReport('sales'));
+            document.getElementById('downloadUsageButton').addEventListener('click', () => downloadReport('all'));
+       
+        </script>
+
+
+        <!-- Link to External JS -->
+        <script src="speed.js"></script>
+        <script src="mail.js"></script>
+        <script src="graph.js"></script>
+        <script src="total_user_signup.js"></script>
+        <script src="prime_member_count.js"></script>
+        <script src="total_trainer.js"></script>
+        <script src="calender.js"></script>
+        <script src="profiledp.js"></script>
+        <script src="prfname.js"></script>
+        <script src="euserss.js"></script>
+        <script src="analytics_tab.js"></script>
+        <script src="fetchtotalsale.js"></script>
+        <script src="report.js"></script>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

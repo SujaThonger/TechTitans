@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Page Loader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #444;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        #main-content {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a id="dashboard-link">Dashboard</a>
+        <a id="contacts-link">Contacts</a>
+        <a id="about-link">About</a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        <!-- Default Page -->
+        <h1>Dashboard</h1>
+        <p>Welcome to the Dashboard!</p>
+    </div>
+
+    <!-- Link External JavaScript -->
+    <script src="sidesidetest.js"></script>
+</body>
+
+</html>
+
+

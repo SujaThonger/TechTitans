@@ -13,13 +13,10 @@ const Navbar = () => {
         <div className='gpt3__navbar-links_container'>
           <p><a href='#home'>Home</a></p>
           <p><a href='#wgpt3'>What is QuestGenAI?</a></p>
-          <p><a href='#features'>Case studies</a></p>
+          <p><a href='#features'>Features</a></p>
         </div>
       </div>
-      <div className='gpt3__navbar-sign'>
-        <p>Sign in</p>
-        <button type="button">Sign Up</button>
-      </div>
+      
       <div className='gpt3__navbar-menu'>
       {toggleMenu
           ? <RiCloseLine color="#fff" size={27} onClick={() => setToggleMenu(false)} />
@@ -32,8 +29,9 @@ const Navbar = () => {
             <p><a href="#features">Features</a></p>
           </div>
           <div className="gpt3__navbar-menu_container-links-sign">
-            <p>Sign in</p>
-            <button type="button">Sign up</button>
+          <a href='/Multi_signIN/hh.html'>
+        <button type="button">Sign Up</button>
+        </a>
           </div>
         </div>
         )}

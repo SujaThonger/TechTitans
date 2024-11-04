@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="profile.css">
+    <title>Admin Profile</title>
+</head>
+
+<body>
+
+    <div class="profile-page">
+        <div class="profile-container">
+            <h1>Admin Profile</h1>
+
+            <div class="profile-photo">
+                <img id="profilePic" src="default-profile-pic.jpg" alt="Admin Profile Photo">
+                <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" style="display: none;">
+            </div>
+            <form id="adminProfileForm">
+                <label for="adminId">Admin ID:</label>
+                <input type="text" id="adminId" name="adminId" readonly>
+
+                <label for="adminName">Name:</label>
+                <input type="text" id="adminName" name="adminName">
+
+                <label for="adminEmail">Email:</label>
+                <input type="email" id="adminEmail" name="adminEmail">
+
+                <label for="adminPhone">Phone:</label>
+                <input type="number" id="adminPhone" name="adminPhone">
+
+                <label for="adminPosition">Position:</label>
+                <input type="text" id="adminPosition" name="adminPosition">
+
+                <button type="button" id="updateButton">Update</button> <!-- Update Button -->
+            </form>
+        </div>
+    </div>
+
+    <script>
+        fetch('/admin/profile')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('adminId').value = data._id; // Use data._id (MongoDB ObjectId)
+                document.getElementById('adminName').value = data.name;
+                document.getElementById('adminEmail').value = data.email;
+                document.getElementById('adminPhone').value = data.phone;
+                document.getElementById('adminPosition').value = data.position;
+
+                // Set profile picture if available
+                if (data.profilePic) {
+                    document.getElementById('profilePic').src = data.profilePic;
+                }
+            })
+            .catch(error => console.error('Error fetching admin data:', error));
+
+
+
+        // Handle profile update
+        document.getElementById('updateButton').addEventListener('click', function () {
+            const updatedData = {
+                id: document.getElementById('adminId').value,
+                name: document.getElementById('adminName').value,
+                email: document.getElementById('adminEmail').value,
+                phone: document.getElementById('adminPhone').value,
+                position: document.getElementById('adminPosition').value
+            };
+
+            fetch('/admin/profile/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Profile updated successfully!");
+                    } else {
+                        alert("Failed to update profile: " + data.message);
+                    }
+                })
+                .catch(error => console.error('Error updating profile:', error));
+        });
+    </script>
+
+   
+    <script>
+        fetch('/admin/profile')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('adminId').value = data._id; // Use data._id (MongoDB ObjectId)
+                document.getElementById('adminName').value = data.name;
+                document.getElementById('adminEmail').value = data.email;
+                document.getElementById('adminPhone').value = data.phone;
+                document.getElementById('adminPosition').value = data.position;
+
+                // Update profile picture if available
+                if (data.profilePic) {
+                    document.getElementById('profilePic').src = data.profilePic;
+                }
+            })
+            .catch(error => console.error('Error fetching admin data:', error));
+    </script>
+
+
+
+
+</body>
+
+</html>

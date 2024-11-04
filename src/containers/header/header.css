@@ -46,6 +46,12 @@
 .gpt3__header-btn {
     margin-top: 3rem;
 }
+#button1{
+    margin-right: 10px;
+}
+#button2{
+    margin-right: 10px;
+}
 
 .gpt3__header-btn button {
     background: #ffffff;

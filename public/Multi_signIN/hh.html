@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Login System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="hhcss.css">
+</head>
+
+<body>
+
+    <!-- Background Animation Section -->
+    <div id="bg">
+        <canvas></canvas>
+        <canvas></canvas>
+        <canvas></canvas>
+    </div>
+
+    <!-- Header Section -->
+    <div class="header">
+        <h1 id="titleheader">MULTI LOGIN SYSTEM</h1>
+        
+    </div>
+
+    <!-- Flex Container for the Sign-up/Sign-in Options -->
+    <div class="flex-container">
+
+
+        <!-- Trainer Login Section -->
+        <div class="main">
+            <input type="checkbox" id="chkTrainer" aria-hidden="true">
+            <div class="signup">
+                <form>
+                    <label for="chkTrainer" aria-hidden="true"><img src="img/icons8-training-64.png" alt="icon"> Trainer
+                        Sign up</label>
+                    <input type="text" name="trainerName" placeholder="Trainer Username" required="">
+                    <input type="email" name="trainerEmail" placeholder="Trainer Email" required="">
+                    <input type="number" name="trainerPhone" placeholder="Phone Number" required="">
+                    <input type="password" name="trainerPassword" placeholder="Password" required="">
+                    <button>Sign up</button>
+                </form>
+            </div>
+            
+
+            <div class="login">
+                <form>
+                    <label for="chkTrainer" aria-hidden="true"> Trainer Login</label>
+                    <input type="email" name="trainerEmail" placeholder="Email" required="">
+                    <input type="password" name="trainerPassword" placeholder="Password" required="">
+                    <button>Login</button>
+                </form>
+            </div>
+        </div>
+
+        
+
+        <!-- Employee Login Section -->
+        <div class="main">
+            <input type="checkbox" id="chkEmployee" aria-hidden="true">
+            <div class="signup">
+                <form action="/signup/employee" method="POST">
+                    <label for="chkEmployee" aria-hidden="true"><img src="img/employee.png"> Employee Sign up</label>
+                    <input type="text" name="employeeName" placeholder="Employee Username" required="">
+                    <input type="email" name="employeeEmail" placeholder="Employee Email" required="">
+                    <input type="number" name="employeePhone" placeholder="Phone Number" required="">
+                    <input type="password" name="employeePassword" placeholder="Password" required="">
+                    <button type="submit">Sign up</button>
+                </form>
+            </div>
+
+            <div class="login">
+                <form>
+                    <label for="chkEmployee" aria-hidden="true"> Employee Login</label>
+                    <input type="email" name="employeeEmail" placeholder="Email" required="">
+                    <input type="password" name="employeePassword" placeholder="Password" required="">
+                    <button>Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script src="background-animation.js"></script>
+</body>
+
+</html>
